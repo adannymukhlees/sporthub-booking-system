@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SportHub - Booking Records</title>
+    <title>SportHub - Professional Booking Management</title>
     <!-- Bootstrap 5 CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons CDN -->
@@ -31,18 +31,76 @@
             color: var(--navy-primary);
         }
 
+        /* Executive Stat Cards */
+        .mini-stat-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(10, 25, 47, 0.06);
+            background: #ffffff;
+            transition: all 0.2s ease;
+        }
+
+        .mini-stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(10, 25, 47, 0.12);
+        }
+
         /* Table Card Styling */
         .table-card {
             border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(10, 25, 47, 0.08);
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(10, 25, 47, 0.08);
             background: #ffffff;
             overflow: hidden;
+        }
+
+        .table > :not(caption) > * > * {
+            padding: 1rem 1.25rem;
         }
 
         .table thead {
             background-color: var(--navy-primary);
             color: #ffffff;
+        }
+
+        /* Avatar Icon */
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: rgba(10, 25, 47, 0.1);
+            color: var(--navy-primary);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        /* Modern Status Badges */
+        .badge-status {
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.78rem;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-pending {
+            background-color: #fff8e6;
+            color: #d97706;
+            border: 1px solid #fcd34d;
+        }
+
+        .badge-approved {
+            background-color: #e0f2fe;
+            color: #0284c7;
+            border: 1px solid #7dd3fc;
+        }
+
+        .badge-returned {
+            background-color: #dcfce7;
+            color: #15803d;
+            border: 1px solid #86efac;
         }
 
         .active-user-badge {
@@ -100,22 +158,58 @@
     <!-- Main Content Container -->
     <div class="container my-4 flex-grow-1">
         
-        <!-- Header & Filter Bar -->
-        <div class="bg-white p-4 rounded-3 shadow-sm mb-4">
-            <div class="row align-items-center g-3">
-                <div class="col-12 col-md-6">
-                    <h4 class="fw-bold text-navy mb-1">Equipment Booking Records</h4>
-                    <p class="text-muted mb-0 small">Manage, review, and track all student and staff equipment requests.</p>
+        <!-- Header Banner -->
+        <div class="d-md-flex align-items-center justify-content-between mb-4 bg-white p-4 rounded-3 shadow-sm">
+            <div>
+                <h4 class="fw-bold text-navy mb-1"><i class="bi bi-shield-check text-primary me-2"></i>Booking Management Portal</h4>
+                <p class="text-muted mb-0 small">Review, manage, and track all campus sports equipment requests in real time.</p>
+            </div>
+            <div class="mt-3 mt-md-0">
+                <a href="equipment.html" class="btn btn-navy px-3 py-2 fw-semibold rounded-2">
+                    <i class="bi bi-plus-circle me-1"></i> New Reservation
+                </a>
+            </div>
+        </div>
+
+        <!-- Executive Summary Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+                <div class="mini-stat-card p-3 border-start border-4 border-primary">
+                    <span class="text-muted small fw-semibold text-uppercase">Total Records</span>
+                    <h3 class="fw-bold text-navy mb-0 mt-1" id="countAll">0</h3>
                 </div>
-                <!-- Filter Controls -->
-                <div class="col-12 col-sm-6 col-md-3">
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="mini-stat-card p-3 border-start border-4 border-warning">
+                    <span class="text-muted small fw-semibold text-uppercase">Pending Review</span>
+                    <h3 class="fw-bold text-warning mb-0 mt-1" id="countPending">0</h3>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="mini-stat-card p-3 border-start border-4 border-info">
+                    <span class="text-muted small fw-semibold text-uppercase">Approved / In-Use</span>
+                    <h3 class="fw-bold text-info mb-0 mt-1" id="countApproved">0</h3>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="mini-stat-card p-3 border-start border-4 border-success">
+                    <span class="text-muted small fw-semibold text-uppercase">Completed Returns</span>
+                    <h3 class="fw-bold text-success mb-0 mt-1" id="countReturned">0</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls Bar -->
+        <div class="bg-white p-3 rounded-3 shadow-sm mb-4">
+            <div class="row g-3 align-items-center">
+                <div class="col-12 col-md-6">
                     <div class="input-group">
                         <span class="input-group-text bg-light text-muted border-end-0"><i class="bi bi-search"></i></span>
-                        <input type="text" id="tableSearch" onkeyup="renderTable()" class="form-control bg-light border-start-0" placeholder="Search ID or User...">
+                        <input type="text" id="tableSearch" onkeyup="renderTable()" class="form-control bg-light border-start-0" placeholder="Search by ID, User, or Equipment name...">
                     </div>
                 </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <select id="statusFilter" onchange="renderTable()" class="form-select bg-light">
+                <div class="col-12 col-md-6 d-flex justify-content-md-end gap-2">
+                    <select id="statusFilter" onchange="renderTable()" class="form-select bg-light" style="max-width: 200px;">
                         <option value="All">All Statuses</option>
                         <option value="Pending">Pending Review</option>
                         <option value="Approved">Approved / In-Use</option>
@@ -125,18 +219,18 @@
             </div>
         </div>
 
-        <!-- 3.4 Data View 2: Data Table -->
-        <div class="card table-card p-0">
+        <!-- Professional Data Table Card -->
+        <div class="card table-card">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead>
                         <tr>
                             <th scope="col" class="py-3 ps-4">Booking ID</th>
-                            <th scope="col" class="py-3">Borrower</th>
+                            <th scope="col" class="py-3">Borrower Name</th>
                             <th scope="col" class="py-3">Equipment</th>
-                            <th scope="col" class="py-3">Date</th>
+                            <th scope="col" class="py-3">Reservation Date</th>
                             <th scope="col" class="py-3">Status</th>
-                            <th scope="col" class="py-3 text-end pe-4">Actions</th>
+                            <th scope="col" class="py-3 text-end pe-4">Manage Actions</th>
                         </tr>
                     </thead>
                     <tbody id="bookingTableBody">
@@ -160,15 +254,8 @@
 
     <!-- Page Logic JavaScript -->
     <script>
-        const defaultBookings = [
-            { id: 'BK-1001', user: 'admin', equipment: 'Football', date: '2026-03-20', status: 'Approved' },
-            { id: 'BK-1002', user: 'student', equipment: 'Badminton Racket', date: '2026-03-21', status: 'Pending' },
-            { id: 'BK-1003', user: 'student', equipment: 'Basketball', date: '2026-03-22', status: 'Returned' },
-            { id: 'BK-1004', user: 'admin', equipment: 'Tennis Racket', date: '2026-03-23', status: 'Approved' },
-            { id: 'BK-1005', user: 'student', equipment: 'Football', date: '2026-03-24', status: 'Approved' },
-            { id: 'BK-1006', user: 'student', equipment: 'Futsal Ball', date: '2026-03-25', status: 'Pending' },
-            { id: 'BK-1007', user: 'admin', equipment: 'Badminton Racket', date: '2026-03-25', status: 'Returned' }
-        ];
+        // Array kosong (Tanpa data awal)
+        const defaultBookings = [];
 
         document.addEventListener("DOMContentLoaded", function() {
             // Check Session
@@ -189,6 +276,12 @@
             const searchVal = document.getElementById('tableSearch').value.toLowerCase();
             const filterVal = document.getElementById('statusFilter').value;
 
+            // Update Executive Summary Card Counts
+            document.getElementById('countAll').textContent = bookings.length;
+            document.getElementById('countPending').textContent = bookings.filter(b => b.status === 'Pending').length;
+            document.getElementById('countApproved').textContent = bookings.filter(b => b.status === 'Approved').length;
+            document.getElementById('countReturned').textContent = bookings.filter(b => b.status === 'Returned').length;
+
             tbody.innerHTML = '';
 
             const filtered = bookings.filter(item => {
@@ -199,41 +292,68 @@
                 return matchesSearch && matchesFilter;
             });
 
+            // Tampilan jika tiada data tempahan
             if (filtered.length === 0) {
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="6" class="text-center py-5 text-muted">
-                            <i class="bi bi-folder2-open display-4 d-block mb-2"></i>
-                            No booking records match your criteria.
+                            <i class="bi bi-inbox display-4 d-block mb-2 text-secondary"></i>
+                            <h6 class="fw-bold mb-1">No Booking Records Available</h6>
+                            <p class="small mb-3">Go to Equipment Catalog to place your first equipment booking.</p>
+                            <a href="equipment.html" class="btn btn-navy btn-sm px-3 fw-semibold">
+                                <i class="bi bi-plus-circle me-1"></i> Book Equipment
+                            </a>
                         </td>
                     </tr>`;
                 return;
             }
 
             filtered.forEach(item => {
-                let badgeClass = 'bg-warning text-dark';
-                if (item.status === 'Approved') badgeClass = 'bg-primary';
-                if (item.status === 'Returned') badgeClass = 'bg-success';
+                let badgeClass = 'badge-pending';
+                let statusIcon = 'bi-clock-history';
+
+                if (item.status === 'Approved') {
+                    badgeClass = 'badge-approved';
+                    statusIcon = 'bi-check-circle-fill';
+                } else if (item.status === 'Returned') {
+                    badgeClass = 'badge-returned';
+                    statusIcon = 'bi-box-arrow-in-left';
+                }
+
+                const initial = item.user.charAt(0).toUpperCase();
 
                 const row = `
                     <tr>
-                        <td class="ps-4 fw-bold text-navy">${item.id}</td>
-                        <td><i class="bi bi-person me-1 text-secondary"></i> ${item.user}</td>
-                        <td class="fw-semibold">${item.equipment}</td>
-                        <td class="text-muted small">${item.date}</td>
+                        <td class="ps-4 fw-bold text-navy">
+                            <span class="badge bg-light text-navy border font-monospace">${item.id}</span>
+                        </td>
                         <td>
-                            <span class="badge ${badgeClass} px-3 py-2 rounded-pill">${item.status}</span>
+                            <div class="d-flex align-items-center">
+                                <div class="user-avatar me-2">${initial}</div>
+                                <span class="fw-semibold text-dark">${item.user}</span>
+                            </div>
+                        </td>
+                        <td class="fw-semibold text-navy">
+                            <i class="bi bi-dribbble me-1 text-primary"></i>${item.equipment}
+                        </td>
+                        <td class="text-muted small">
+                            <i class="bi bi-calendar3 me-1"></i>${item.date}
+                        </td>
+                        <td>
+                            <span class="badge-status ${badgeClass}">
+                                <i class="bi ${statusIcon} me-1"></i>${item.status}
+                            </span>
                         </td>
                         <td class="text-end pe-4">
                             <div class="dropdown">
-                                <button class="btn btn-light btn-sm dropdown-toggle fw-semibold" type="button" data-bs-toggle="dropdown">
-                                    Action
+                                <button class="btn btn-outline-secondary btn-sm dropdown-toggle fw-semibold rounded-2" type="button" data-bs-toggle="dropdown">
+                                    Option
                                 </button>
-                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                                    <li><a class="dropdown-item text-primary" href="#" onclick="updateStatus('${item.id}', 'Approved')"><i class="bi bi-check-circle me-2"></i>Approve</a></li>
-                                    <li><a class="dropdown-item text-success" href="#" onclick="updateStatus('${item.id}', 'Returned')"><i class="bi bi-box-arrow-in-left me-2"></i>Mark Returned</a></li>
+                                <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                                    <li><a class="dropdown-item text-primary" href="#" onclick="updateStatus('${item.id}', 'Approved')"><i class="bi bi-check-lg me-2"></i>Approve Request</a></li>
+                                    <li><a class="dropdown-item text-success" href="#" onclick="updateStatus('${item.id}', 'Returned')"><i class="bi bi-arrow-return-left me-2"></i>Mark as Returned</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item text-danger" href="#" onclick="deleteBooking('${item.id}')"><i class="bi bi-trash me-2"></i>Cancel Booking</a></li>
+                                    <li><a class="dropdown-item text-danger" href="#" onclick="deleteBooking('${item.id}')"><i class="bi bi-trash3 me-2"></i>Cancel & Delete</a></li>
                                 </ul>
                             </div>
                         </td>
@@ -251,7 +371,7 @@
         }
 
         function deleteBooking(id) {
-            if (confirm(`Are you sure you want to cancel and delete record ${id}?`)) {
+            if (confirm(`Are you sure you want to cancel and remove booking record ${id}?`)) {
                 let bookings = JSON.parse(localStorage.getItem('hubBookings')) || [];
                 bookings = bookings.filter(b => b.id !== id);
                 localStorage.setItem('hubBookings', JSON.stringify(bookings));
@@ -266,4 +386,4 @@
         }
     </script>
 </body>
-</html>
+</html> 
