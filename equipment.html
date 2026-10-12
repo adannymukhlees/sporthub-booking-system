@@ -31,7 +31,7 @@
             color: var(--navy-primary);
         }
 
-        /* Card Styling */
+        /* Card & Image Styling */
         .equipment-card {
             border: none;
             border-radius: 12px;
@@ -47,18 +47,22 @@
         }
 
         .card-img-wrapper {
-            height: 180px;
-            background-color: #e9ecef;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--navy-primary);
+            height: 200px;
+            width: 100%;
             position: relative;
+            overflow: hidden;
+            background-color: #e9ecef;
         }
 
-        .card-img-wrapper i {
-            font-size: 4.5rem;
-            opacity: 0.85;
+        .card-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .equipment-card:hover .card-img-wrapper img {
+            transform: scale(1.05);
         }
 
         .badge-category {
@@ -71,6 +75,8 @@
             padding: 5px 12px;
             border-radius: 20px;
             font-size: 0.75rem;
+            z-index: 2;
+            backdrop-filter: blur(4px);
         }
 
         .active-user-badge {
@@ -160,7 +166,7 @@
             <button type="button" class="btn-close" onclick="hideAlert()"></button>
         </div>
 
-        <!-- 3.4 Data View 1: Equipment Grid Cards -->
+        <!-- Data View 1: Equipment Grid Cards dengan Gambar -->
         <div class="row g-4" id="equipmentGrid">
             <!-- Dynamic Equipment Cards populated by JS -->
         </div>
@@ -222,16 +228,16 @@
 
     <!-- Page Logic JavaScript -->
     <script>
-        // Master Catalog Dataset
+        // Master Catalog Dataset dengan Pautan Gambar Sebenar (Unsplash Sports Images)
         const catalogData = [
-            { id: 1, name: "Football", category: "Ball Games", stock: 15, icon: "bi-dribbble", desc: "Standard FIFA size 5 match football." },
-            { id: 2, name: "Badminton Racket", category: "Racket Sports", stock: 24, icon: "bi-activity", desc: "Lightweight carbon fiber racket." },
-            { id: 3, name: "Basketball", category: "Ball Games", stock: 10, icon: "bi-circle", desc: "Indoor/Outdoor composite leather basketball." },
-            { id: 4, name: "Tennis Racket", category: "Racket Sports", stock: 8, icon: "bi-grid-3x3", desc: "Professional high-string tension tennis racket." },
-            { id: 5, name: "Futsal Ball", category: "Ball Games", stock: 12, icon: "bi-suit-diamond-fill", desc: "Low-bounce official futsal ball." },
-            { id: 6, name: "Volleyball", category: "Ball Games", stock: 9, icon: "bi-record-circle", desc: "Soft-touch synthetic leather volleyball." },
-            { id: 7, name: "Table Tennis Bat", category: "Racket Sports", stock: 30, icon: "bi-disc", desc: "ITTF approved tournament paddle." },
-            { id: 8, name: "Stopwatch", category: "Track & Field", stock: 18, icon: "bi-stopwatch", desc: "Digital multi-lap precision timer." }
+            { id: 1, name: "Football", category: "Ball Games", stock: 15, image: "https://images.unsplash.com/photo-1614632537197-38a17061c2bd?w=500&auto=format&fit=crop&q=80", desc: "Standard FIFA size 5 match football." },
+            { id: 2, name: "Badminton Racket", category: "Racket Sports", stock: 24, image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=500&auto=format&fit=crop&q=80", desc: "Lightweight carbon fiber racket set." },
+            { id: 3, name: "Basketball", category: "Ball Games", stock: 10, image: "https://images.unsplash.com/photo-1519861531473-9200262188bf?w=500&auto=format&fit=crop&q=80", desc: "Indoor/Outdoor composite leather basketball." },
+            { id: 4, name: "Tennis Racket", category: "Racket Sports", stock: 8, image: "https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=500&auto=format&fit=crop&q=80", desc: "Professional high-string tension tennis racket." },
+            { id: 5, name: "Futsal Ball", category: "Ball Games", stock: 12, image: "https://images.unsplash.com/photo-1575361204480-aadea25e6e68?w=500&auto=format&fit=crop&q=80", desc: "Low-bounce official indoor futsal ball." },
+            { id: 6, name: "Volleyball", category: "Ball Games", stock: 9, image: "https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?w=500&auto=format&fit=crop&q=80", desc: "Soft-touch synthetic leather volleyball." },
+            { id: 7, name: "Table Tennis Bat", category: "Racket Sports", stock: 30, image: "https://images.unsplash.com/photo-1534158914592-062992fbe900?w=500&auto=format&fit=crop&q=80", desc: "ITTF approved tournament paddle set." },
+            { id: 8, name: "Stopwatch", category: "Track & Field", stock: 18, image: "https://images.unsplash.com/photo-1508962914676-134849a727f0?w=500&auto=format&fit=crop&q=80", desc: "Digital multi-lap precision sports timer." }
         ];
 
         let bookingModalInstance = null;
@@ -270,7 +276,7 @@
                         <div class="card equipment-card h-100">
                             <div class="card-img-wrapper">
                                 <span class="badge-category">${item.category}</span>
-                                <i class="bi ${item.icon}"></i>
+                                <img src="${item.image}" alt="${item.name}" loading="lazy">
                             </div>
                             <div class="card-body d-flex flex-column p-3">
                                 <h5 class="fw-bold text-navy mb-1">${item.name}</h5>
@@ -334,3 +340,29 @@
 
             // Push and Save to LocalStorage
             bookings.unshift(newBooking);
+            localStorage.setItem('hubBookings', JSON.stringify(bookings));
+
+            // Hide Modal & Show Toast Alert
+            bookingModalInstance.hide();
+            showAlert(`Successfully booked ${equipName}! Status is set to Pending Review.`);
+        }
+
+        function showAlert(msg) {
+            const toast = document.getElementById('toastAlert');
+            document.getElementById('toastMessage').textContent = msg;
+            toast.classList.remove('d-none');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function hideAlert() {
+            document.getElementById('toastAlert').classList.add('d-none');
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
